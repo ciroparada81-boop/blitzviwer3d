@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BlitzViwer3D — Documentación</title>
+<title>DevCode3D — Documentación</title>
 <style>
   :root{
     --bg:#0e1016;
@@ -257,6 +257,17 @@
   }
   .btn-download svg{width:18px; height:18px; flex-shrink:0;}
 
+  .download-count{
+    margin-top:10px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:var(--text-dim);
+    font-size:.82rem;
+  }
+  .download-count svg{width:14px; height:14px; flex-shrink:0;}
+  .download-count .num{color:var(--accent-2); font-weight:600; font-variant-numeric:tabular-nums;}
+
   .req-list{
     display:grid;
     grid-template-columns:repeat(2,1fr);
@@ -338,7 +349,7 @@
   <section id="intro">
     <h2><span class="num">01</span> Introduction</h2>
     <p>
-      BlitzViwer3D combines a highly simplified Unity/Godot-style scene editor with a Lua
+      DevCode3D combines a highly simplified Unity/Godot-style scene editor with a Lua
       scripting engine that replicates the classic <strong>Blitz3D</strong> API (<code class="inline">CreateCube</code>,
       <code class="inline">PositionEntity</code>, <code class="inline">MoveEntity</code>, etc.). The idea is
       to let you build a scene by hand with the mouse (Hierarchy + Inspector), then bring it to life with a
@@ -367,7 +378,7 @@
     <h2><span class="num">02</span> General interface</h2>
     <p>The window is organized into dockable panels, IDE-style:</p>
     <figure>
-      <img src="imagenes/cubo.png" alt="BlitzViwer3D general interface with a cube in the scene">
+      <img src="imagenes/cubo.png" alt="DevCode3D general interface with a cube in the scene">
       <figcaption>Default layout: Hierarchy (left), 3D Viewport + Console (center),
       Toolbar / Camera / Inspector (right).</figcaption>
     </figure>
@@ -620,13 +631,18 @@
 
     <div class="download-card">
       <div class="info">
-        <h4>BlitzViwer3D.exe</h4>
+        <h4>DevCode3D.exe</h4>
         <p>Windows 64-bit · Debug build · ~6.4 MB</p>
       </div>
-      <a class="btn-download" href="descargas/BlitzViwer3D.exe" download>
+      <a class="btn-download" id="download-btn" href="descargas/DevCode3D.exe" download>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Download .exe
       </a>
+    </div>
+
+    <div class="download-count">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span class="num" id="download-count-num">—</span> downloads so far
     </div>
 
     <ul class="req-list">
@@ -649,7 +665,7 @@
       <div class="mark">ZS</div>
       <div class="txt">
         <h4>ZyronSoftware</h4>
-        <p>BlitzViwer3D — project developed in 2026.</p>
+        <p>DevCode3D — project developed in 2026.</p>
       </div>
     </div>
   </section>
@@ -657,11 +673,40 @@
 </main>
 
 <footer>
-  BlitzViwer3D © 2026 ZyronSoftware · Documentation based on the source code (<code class="inline">main-imgui.cpp</code>) and screenshots of the application itself.
+  DevCode3D © 2026 ZyronSoftware · Documentation based on the source code (<code class="inline">main-imgui.cpp</code>) and screenshots of the application itself.
   <div style="margin-top:14px;">
     <img src="https://visitor-badge.laobi.icu/badge?page_id=ciroparada81-boop.blitzviwer3d" alt="Visit counter" style="vertical-align:middle;">
   </div>
 </footer>
+
+<script>
+(function(){
+  var COUNTER_NAMESPACE = "devcode3d-docs";
+  var COUNTER_KEY = "exe-downloads";
+  var el = document.getElementById("download-count-num");
+  var btn = document.getElementById("download-btn");
+
+  function render(value){
+    if(el) el.textContent = value;
+  }
+
+  // Show current count on load (does not increment).
+  fetch("https://api.countapi.xyz/get/" + COUNTER_NAMESPACE + "/" + COUNTER_KEY)
+    .then(function(r){ return r.json(); })
+    .then(function(data){ render(data && typeof data.value === "number" ? data.value : 0); })
+    .catch(function(){ render(0); });
+
+  // Increment when the download link is actually clicked.
+  if(btn){
+    btn.addEventListener("click", function(){
+      fetch("https://api.countapi.xyz/hit/" + COUNTER_NAMESPACE + "/" + COUNTER_KEY)
+        .then(function(r){ return r.json(); })
+        .then(function(data){ if(data && typeof data.value === "number") render(data.value); })
+        .catch(function(){ /* counter is best-effort, ignore failures */ });
+    });
+  }
+})();
+</script>
 
 </body>
 </html>

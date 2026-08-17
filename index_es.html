@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevCode3D — Documentación</title>
+<style>
+  :root{
+    --bg:#0e1016;
+    --panel:#161a24;
+    --panel-2:#1c2130;
+    --border:#2a3142;
+    --text:#e6e9f0;
+    --text-dim:#9aa3b5;
+    --accent:#4c8dff;
+    --accent-2:#7db3ff;
+    --green:#5fd68a;
+    --yellow:#f3c969;
+    --red:#ff7a7a;
+    --code-bg:#11141c;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+  }
+  a{color:var(--accent-2); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  header{
+    padding:56px 8vw 40px;
+    background:radial-gradient(1200px 400px at 20% -10%, #1b2540, transparent),
+               linear-gradient(180deg,#12151f,#0e1016);
+    border-bottom:1px solid var(--border);
+  }
+  header h1{
+    margin:0 0 8px;
+    font-size:2.4rem;
+    letter-spacing:.5px;
+  }
+  header h1 span{color:var(--accent-2);}
+  header p.tag{
+    margin:0;
+    color:var(--text-dim);
+    font-size:1.05rem;
+    max-width:760px;
+  }
+  .badges{margin-top:18px; display:flex; gap:8px; flex-wrap:wrap;}
+  .badge{
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:.78rem;
+  }
+
+  nav.toc{
+    position:sticky; top:0; z-index:10;
+    background:rgba(14,16,22,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+    padding:12px 8vw;
+    display:flex; gap:18px; flex-wrap:wrap;
+    font-size:.88rem;
+  }
+  nav.toc a{color:var(--text-dim);}
+  nav.toc a:hover{color:var(--accent-2);}
+
+  main{
+    max-width:1000px;
+    margin:0 auto;
+    padding:10px 8vw 80px;
+  }
+
+  section{padding-top:52px; margin-top:-20px;}
+  section h2{
+    font-size:1.5rem;
+    border-bottom:1px solid var(--border);
+    padding-bottom:10px;
+    margin-top:0;
+    display:flex; align-items:center; gap:10px;
+  }
+  section h2 .num{
+    color:var(--accent-2);
+    font-variant-numeric:tabular-nums;
+    font-size:1rem;
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:2px 8px;
+  }
+  h3{color:var(--accent-2); font-size:1.12rem; margin-top:34px;}
+  h4{color:var(--text); font-size:1rem; margin-bottom:6px;}
+
+  p{color:#cfd4e0;}
+  .lead{color:var(--text-dim); font-size:1rem;}
+
+  figure{
+    margin:22px 0;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px;
+  }
+  figure img{
+    width:100%;
+    display:block;
+    border-radius:6px;
+    border:1px solid var(--border);
+  }
+  figcaption{
+    color:var(--text-dim);
+    font-size:.85rem;
+    padding:10px 4px 2px;
+  }
+
+  .grid2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  @media (max-width:760px){ .grid2{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px 20px;
+  }
+  .card h4{margin-top:0;}
+
+  code, pre, .mono{
+    font-family:"Cascadia Code","Fira Code",Consolas,monospace;
+  }
+  code.inline{
+    background:var(--code-bg);
+    border:1px solid var(--border);
+    padding:1px 6px;
+    border-radius:4px;
+    font-size:.9em;
+    color:var(--accent-2);
+  }
+  pre{
+    background:var(--code-bg);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:16px 18px;
+    overflow-x:auto;
+    font-size:.87rem;
+    line-height:1.55;
+  }
+  pre .c{color:#6b7385;}
+  pre .kw{color:#c586c0;}
+  pre .fn{color:#dcdcaa;}
+  pre .str{color:#ce9178;}
+  pre .num{color:#b5cea8;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:14px 0 26px;
+    font-size:.9rem;
+  }
+  caption{
+    text-align:left;
+    color:var(--text-dim);
+    font-size:.85rem;
+    margin-bottom:6px;
+  }
+  th,td{
+    border:1px solid var(--border);
+    padding:8px 10px;
+    text-align:left;
+    vertical-align:top;
+  }
+  th{
+    background:var(--panel-2);
+    color:var(--accent-2);
+    font-weight:600;
+    white-space:nowrap;
+  }
+  tr:nth-child(even) td{background:#141824;}
+  td code.inline{white-space:nowrap;}
+
+  .kbd{
+    display:inline-block;
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-bottom-width:2px;
+    border-radius:5px;
+    padding:1px 7px;
+    font-family:monospace;
+    font-size:.85em;
+  }
+
+  .note{
+    border-left:3px solid var(--accent);
+    background:#141a2c;
+    padding:12px 16px;
+    border-radius:0 8px 8px 0;
+    margin:18px 0;
+    color:#c9d2e6;
+    font-size:.92rem;
+  }
+  .warn{
+    border-left:3px solid var(--yellow);
+    background:#241f14;
+  }
+
+  footer{
+    border-top:1px solid var(--border);
+    padding:26px 8vw;
+    color:var(--text-dim);
+    font-size:.85rem;
+    text-align:center;
+  }
+
+  ul{color:#cfd4e0;}
+  li{margin-bottom:4px;}
+
+  .download-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    background:linear-gradient(135deg,#182036,#141824);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:24px 26px;
+    margin:22px 0;
+  }
+  .download-card .info h4{margin:0 0 6px; font-size:1.1rem;}
+  .download-card .info p{margin:0; color:var(--text-dim); font-size:.88rem;}
+  .btn-download{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--accent);
+    color:#0b1220;
+    font-weight:600;
+    padding:12px 22px;
+    border-radius:8px;
+    font-size:.95rem;
+    white-space:nowrap;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .btn-download:hover{
+    background:var(--accent-2);
+    text-decoration:none;
+    transform:translateY(-1px);
+  }
+  .btn-download svg{width:18px; height:18px; flex-shrink:0;}
+
+  .download-count{
+    margin-top:10px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:var(--text-dim);
+    font-size:.82rem;
+  }
+  .download-count svg{width:14px; height:14px; flex-shrink:0;}
+  .download-count .num{color:var(--accent-2); font-weight:600; font-variant-numeric:tabular-nums;}
+
+  .req-list{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px 24px;
+    margin:16px 0 0;
+    padding:0;
+    list-style:none;
+  }
+  @media (max-width:760px){ .req-list{grid-template-columns:1fr;} }
+  .req-list li{
+    display:flex;
+    gap:8px;
+    align-items:baseline;
+    color:var(--text-dim);
+    font-size:.9rem;
+  }
+  .req-list li::before{
+    content:"▹";
+    color:var(--accent-2);
+  }
+
+  .credits{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:24px 26px;
+    flex-wrap:wrap;
+  }
+  .credits .mark{
+    width:56px; height:56px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--accent),#2a5ec9);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:1.3rem; color:#0b1220;
+    flex-shrink:0;
+  }
+  .credits .txt h4{margin:0 0 4px; font-size:1.05rem;}
+  .credits .txt p{margin:0; color:var(--text-dim); font-size:.9rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+    <a href="index.html" class="badge" style="cursor:pointer;">🇬🇧 English</a>
+  </div>
+  <h1>Blitz<span>Viwer</span>3D</h1>
+  <p class="tag">Un editor/visor 3D liviano con scripting en Lua, inspirado en la API clásica de Blitz3D.
+  Creá objetos, moveté por la escena con la cámara orbital, escribí lógica de juego en el panel Script
+  y probala al instante con <strong>Play</strong>.</p>
+  <div class="badges">
+    <span class="badge">C++ · OpenGL · Dear ImGui</span>
+    <span class="badge">Scripting: Lua 5.4</span>
+    <span class="badge">Escenas: JSON</span>
+    <span class="badge">Modelos: .obj / .mtl</span>
+    <span class="badge">© 2026 ZyronSoftware</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <a href="#intro">Introducción</a>
+  <a href="#interfaz">Interfaz</a>
+  <a href="#hierarchy">Hierarchy</a>
+  <a href="#inspector">Inspector</a>
+  <a href="#camara">Cámara</a>
+  <a href="#viewport">Viewport y controles</a>
+  <a href="#script">Editor de Script</a>
+  <a href="#api">API Lua</a>
+  <a href="#escenas">Escenas</a>
+  <a href="#descargas">Descargas</a>
+  <a href="#creditos">Créditos</a>
+</nav>
+
+<main>
+
+  <section id="intro">
+    <h2><span class="num">01</span> Introducción</h2>
+    <p>
+      DevCode3D combina un editor de escena tipo Unity/Godot muy simplificado con un motor de scripting
+      Lua que replica la API clásica de <strong>Blitz3D</strong> (<code class="inline">CreateCube</code>,
+      <code class="inline">PositionEntity</code>, <code class="inline">MoveEntity</code>, etc.). La idea es
+      poder armar una escena a mano con el mouse (Hierarchy + Inspector), y después darle vida con un
+      script: mover objetos, detectar colisiones simples, seguir al jugador con la cámara, leer teclado y
+      mouse, y todo eso sin salir de la app.
+    </p>
+    <div class="grid2">
+      <div class="card">
+        <h4>Modo edición</h4>
+        <p style="margin:0;color:var(--text-dim);font-size:.92rem;">
+          Creás y acomodás objetos (cubos, esferas o modelos <code class="inline">.obj</code>) usando
+          Hierarchy e Inspector. Esta disposición se puede guardar como escena.
+        </p>
+      </div>
+      <div class="card">
+        <h4>Modo Play</h4>
+        <p style="margin:0;color:var(--text-dim);font-size:.92rem;">
+          Al apretar <strong>Play</strong> se ejecuta el script del panel Script. La escena de edición se
+          respalda automáticamente y se restaura al apretar <strong>Stop</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="interfaz">
+    <h2><span class="num">02</span> Interfaz general</h2>
+    <p>La ventana se organiza en paneles acoplables (dockeables), al estilo de un IDE:</p>
+    <figure>
+      <img src="imagenes/cubo.png" alt="Interfaz general de DevCode3D con un cubo en la escena">
+      <figcaption>Layout por defecto: Hierarchy (izquierda), Viewport 3D + Console (centro),
+      Toolbar / Camera / Inspector (derecha).</figcaption>
+    </figure>
+    <table>
+      <caption>Paneles principales</caption>
+      <tr><th>Panel</th><th>Función</th></tr>
+      <tr><td><strong>Hierarchy</strong></td><td>Lista de objetos de la escena. Crear/borrar cubos, esferas y modelos.</td></tr>
+      <tr><td><strong>Inspector</strong></td><td>Propiedades del objeto seleccionado: nombre, transform, forma, color.</td></tr>
+      <tr><td><strong>Script</strong></td><td>Editor de código Lua (pestaña junto a Render).</td></tr>
+      <tr><td><strong>Render</strong></td><td>Viewport 3D donde se ve y se navega la escena.</td></tr>
+      <tr><td><strong>Console</strong></td><td>Salida de <code class="inline">print()</code>, errores de Lua y eventos Play/Stop.</td></tr>
+      <tr><td><strong>Camera</strong></td><td>Configuración de la cámara orbital y del modo "Follow".</td></tr>
+      <tr><td><strong>Toolbar</strong></td><td>Play / Stop, Wireframe, Grid, guardar/cargar escena, salir.</td></tr>
+    </table>
+    <figure>
+      <img src="imagenes/editor.png" alt="Vista del panel Script con la pestaña Render vacía">
+      <figcaption>El panel central alterna entre la pestaña <strong>Script</strong> (código) y
+      <strong>Render</strong> (vista 3D).</figcaption>
+    </figure>
+  </section>
+
+  <section id="hierarchy">
+    <h2><span class="num">03</span> Panel Hierarchy — crear objetos</h2>
+    <figure>
+      <img src="imagenes/crear.png" alt="Panel Hierarchy con botones + Cube, + Sphere, Delete y + Model">
+      <figcaption>Botonera de creación de objetos.</figcaption>
+    </figure>
+    <ul>
+      <li><strong>+ Cube</strong> / <strong>+ Sphere</strong>: crean un objeto nuevo en el origen y lo seleccionan automáticamente.</li>
+      <li><strong>Delete</strong>: borra el objeto seleccionado (se habilita solo si hay uno seleccionado).</li>
+      <li><strong>Campo de texto + Model</strong>: escribí la ruta a un archivo <code class="inline">.obj</code>
+        (por ejemplo <code class="inline">model.obj</code>) y tocá <strong>+ Model</strong> para cargarlo.
+        Los materiales <code class="inline">.mtl</code> se buscan en la misma carpeta.</li>
+      <li>La lista de abajo muestra todos los objetos de la escena. Los ocultos aparecen atenuados con
+        la marca <em>(oculto)</em>. Click para seleccionar.</li>
+    </ul>
+  </section>
+
+  <section id="inspector">
+    <h2><span class="num">04</span> Panel Inspector — editar propiedades</h2>
+    <div class="grid2">
+      <figure style="margin:22px 0;">
+        <img src="imagenes/posicion.png" alt="Objeto seleccionado con gizmo de ejes y panel Inspector">
+        <figcaption>Al seleccionar un objeto se resalta en el viewport con sus ejes locales.</figcaption>
+      </figure>
+      <figure style="margin:22px 0;">
+        <img src="imagenes/color.png" alt="Panel Inspector mostrando Transform y color propio">
+        <figcaption>Transform (posición/rotación/escala) y color personalizado.</figcaption>
+      </figure>
+    </div>
+    <table>
+      <caption>Campos del Inspector</caption>
+      <tr><th>Campo</th><th>Descripción</th></tr>
+      <tr><td><strong>Name</strong></td><td>Nombre del objeto. Se usa con <code class="inline">GetEntityByName</code> desde el script.</td></tr>
+      <tr><td><strong>Position / Rotation / Scale</strong></td><td>Transform en X, Y, Z. Rotación en grados. Arrastrá con el mouse para cambiar el valor, o hacé doble click para tipearlo.</td></tr>
+      <tr><td><strong>Shape</strong></td><td><code class="inline">Cube</code> o <code class="inline">Sphere</code>. Si el objeto viene de un <code class="inline">.obj</code>, en vez de esto se muestra la ruta del modelo y su cantidad de triángulos, con un botón <strong>Reload</strong>.</td></tr>
+      <tr><td><strong>Color propio</strong></td><td>Si está desactivado, el objeto usa el color "arcoíris" de fábrica por cara. Si se activa, se puede elegir un color sólido con el selector RGB.</td></tr>
+      <tr><td><strong>Oculto</strong></td><td>Igual que <code class="inline">HideEntity</code>/<code class="inline">ShowEntity</code> desde script: oculta el objeto sin borrarlo.</td></tr>
+    </table>
+  </section>
+
+  <section id="camara">
+    <h2><span class="num">05</span> Panel Camera</h2>
+    <p>La cámara es una <strong>cámara orbital</strong> (yaw / pitch / distancia alrededor de un punto
+    "target"), con la opción de seguir automáticamente a un objeto:</p>
+    <table>
+      <tr><th>Control</th><th>Qué hace</th></tr>
+      <tr><td><strong>Follow</strong> + <strong>Objeto</strong></td><td>Si está activo, el punto target de la órbita persigue la posición del objeto elegido, con un suavizado configurable. Vos seguís pudiendo orbitar y hacer zoom alrededor de él.</td></tr>
+      <tr><td><strong>Seguir el seleccionado</strong></td><td>Atajo: activa Follow sobre el objeto actualmente seleccionado en Hierarchy.</td></tr>
+      <tr><td><strong>Suavizado</strong></td><td>Qué tan rápido la cámara "alcanza" al objeto seguido (más alto = más inmediato).</td></tr>
+      <tr><td><strong>Offset</strong></td><td>Desplazamiento del punto de seguimiento respecto al objeto (por ejemplo, para mirarlo un poco más arriba).</td></tr>
+      <tr><td><strong>FOV</strong></td><td>Campo de visión de la cámara, en grados.</td></tr>
+      <tr><td><strong>Sens. órbita / Sens. zoom</strong></td><td>Sensibilidad del mouse al orbitar (botón derecho) y al hacer zoom (rueda).</td></tr>
+      <tr><td><strong>Invertir pitch (Y)</strong></td><td>Invierte el eje vertical al orbitar.</td></tr>
+      <tr><td><strong>Distancia min/max</strong></td><td>Límites de zoom.</td></tr>
+      <tr><td><strong>Reset Camera</strong></td><td>Vuelve todos los valores de cámara a los de fábrica.</td></tr>
+    </table>
+  </section>
+
+  <section id="viewport">
+    <h2><span class="num">06</span> Viewport (Render) y controles de mouse</h2>
+    <table>
+      <tr><th>Acción</th><th>Control</th></tr>
+      <tr><td>Orbitar cámara</td><td>Arrastrar con <span class="kbd">Botón derecho</span> del mouse</td></tr>
+      <tr><td>Zoom</td><td><span class="kbd">Rueda</span> del mouse</td></tr>
+      <tr><td>Seleccionar objeto</td><td>Click en Hierarchy, o desde el script</td></tr>
+    </table>
+    <table>
+      <tr><th>Toolbar</th><th>Función</th></tr>
+      <tr><td><strong>Play</strong></td><td>Guarda un respaldo de la escena, resetea la consola y el reloj interno, compila y ejecuta el script, y llama a <code class="inline">Start()</code> si existe.</td></tr>
+      <tr><td><strong>Stop</strong></td><td>Cierra el estado de Lua y restaura la escena tal como estaba antes de Play.</td></tr>
+      <tr><td><strong>Wireframe</strong></td><td>Dibuja los objetos en modo alambre.</td></tr>
+      <tr><td><strong>Grid</strong></td><td>Muestra/oculta el piso cuadriculado y los ejes de referencia.</td></tr>
+      <tr><td><strong>Save Scene / Load Scene</strong></td><td>Guarda o carga la escena (objetos + cámara) en un archivo JSON, con el nombre indicado en el campo de texto (por defecto <code class="inline">scene.json</code>).</td></tr>
+      <tr><td><strong>Exit</strong></td><td>Cierra la aplicación.</td></tr>
+    </table>
+  </section>
+
+  <section id="script">
+    <h2><span class="num">07</span> Editor de Script</h2>
+    <p>
+      El panel <strong>Script</strong> es un editor de texto con resaltado de sintaxis para Lua. El código
+      que escribas ahí es el que se ejecuta al apretar <strong>Play</strong>.
+    </p>
+    <figure>
+      <img src="imagenes/codigo.png" alt="Editor de script mostrando un ejemplo de código Lua">
+      <figcaption>Ejemplo: buscar al jugador por nombre, crear una "moneda" en una posición al azar y un
+      "enemigo" que sigue al jugador con la cámara.</figcaption>
+    </figure>
+
+    <h3>Funciones especiales</h3>
+    <p>El script puede definir dos funciones globales que el motor llama automáticamente:</p>
+    <table>
+      <tr><th>Función</th><th>Cuándo se ejecuta</th></tr>
+      <tr><td><code class="inline">Start()</code></td><td>Una sola vez, apenas se apreta <strong>Play</strong> (después de correr el resto del script).</td></tr>
+      <tr><td><code class="inline">Update(dt)</code></td><td>Una vez por frame mientras el juego está corriendo. <code class="inline">dt</code> es el tiempo en segundos desde el frame anterior.</td></tr>
+    </table>
+    <div class="note">
+      Si el script tiene un error (de sintaxis o en tiempo de ejecución), el mensaje aparece en rojo en la
+      <strong>Console</strong> y la reproducción se detiene automáticamente.
+    </div>
+
+    <h3>Ejemplo mínimo</h3>
+    <pre><span class="c">-- Se ejecuta una vez al arrancar</span>
+<span class="kw">function</span> <span class="fn">Start</span>()
+    player = CreateCube()
+    ColorEntity(player, <span class="num">80</span>, <span class="num">160</span>, <span class="num">255</span>)
+    PositionEntity(player, <span class="num">0</span>, <span class="num">0.5</span>, <span class="num">0</span>)
+    CameraFollow(player)
+<span class="kw">end</span>
+
+<span class="c">-- Se ejecuta cada frame</span>
+<span class="kw">function</span> <span class="fn">Update</span>(dt)
+    <span class="kw">local</span> speed = <span class="num">4</span>
+    <span class="kw">if</span> KeyDown(<span class="num">0x57</span>) <span class="kw">then</span> MoveEntityLocal(player, <span class="num">0</span>, <span class="num">0</span>,  speed*dt) <span class="kw">end</span> <span class="c">-- W</span>
+    <span class="kw">if</span> KeyDown(<span class="num">0x53</span>) <span class="kw">then</span> MoveEntityLocal(player, <span class="num">0</span>, <span class="num">0</span>, -speed*dt) <span class="kw">end</span> <span class="c">-- S</span>
+    <span class="kw">if</span> KeyDown(<span class="num">0x41</span>) <span class="kw">then</span> TurnEntity(player, <span class="num">0</span>, -<span class="num">90</span>*dt, <span class="num">0</span>) <span class="kw">end</span> <span class="c">-- A</span>
+    <span class="kw">if</span> KeyDown(<span class="num">0x44</span>) <span class="kw">then</span> TurnEntity(player, <span class="num">0</span>,  <span class="num">90</span>*dt, <span class="num">0</span>) <span class="kw">end</span> <span class="c">-- D</span>
+<span class="kw">end</span></pre>
+    <div class="note">
+      Los códigos de teclas para <code class="inline">KeyDown</code>/<code class="inline">KeyHit</code>
+      son los <em>Virtual-Key Codes</em> de Windows (por ejemplo <code class="inline">0x57</code> = "W",
+      <code class="inline">0x20</code> = barra espaciadora, <code class="inline">0x1B</code> = Escape).
+    </div>
+  </section>
+
+  <section id="api">
+    <h2><span class="num">08</span> Referencia de la API Lua</h2>
+    <p class="lead">Todas estas funciones quedan disponibles como globales dentro del script, sin necesidad
+    de <code class="inline">require</code>. Los "objetos" son referenciados por un <em>handle</em> numérico
+    (el valor que devuelven <code class="inline">CreateCube</code>, <code class="inline">CreateSphere</code>, etc.).</p>
+
+    <h3>Creación y consulta de objetos</h3>
+    <table>
+      <tr><th>Función</th><th>Descripción</th></tr>
+      <tr><td><code class="inline">CreateCube()</code></td><td>Crea un cubo y devuelve su handle.</td></tr>
+      <tr><td><code class="inline">CreateSphere()</code></td><td>Crea una esfera y devuelve su handle.</td></tr>
+      <tr><td><code class="inline">LoadModel(ruta)</code></td><td>Carga un modelo <code class="inline">.obj</code> (reutiliza la malla si ya fue cargada) y crea un objeto con ella.</td></tr>
+      <tr><td><code class="inline">GetEntityByName(nombre)</code></td><td>Devuelve el handle del primer objeto con ese nombre, o <code class="inline">nil</code> si no existe.</td></tr>
+      <tr><td><code class="inline">EntityByIndex(i)</code></td><td>Devuelve el handle en la posición <code class="inline">i</code> (1..CountEntities()), útil para recorrer todos los objetos.</td></tr>
+      <tr><td><code class="inline">CountEntities()</code></td><td>Cantidad total de objetos en la escena (incluye ocultos/borrados).</td></tr>
+      <tr><td><code class="inline">EntityExists(handle)</code></td><td>Chequea si un handle sigue siendo válido, sin tirar error.</td></tr>
+      <tr><td><code class="inline">EntityName(handle)</code></td><td>Devuelve el nombre del objeto.</td></tr>
+      <tr><td><code class="inline">DeleteEntity(handle)</code></td><td>Borrado "suave": lo oculta y le cambia el nombre a <code class="inline">(deleted)</code> (los handles de otros objetos no se invalidan).</td></tr>
+    </table>
+
+    <h3>Transform</h3>
+    <table>
+      <tr><th>Función</th><th>Descripción</th></tr>
+      <tr><td><code class="inline">PositionEntity(h, x, y, z)</code></td><td>Fija la posición absoluta.</td></tr>
+      <tr><td><code class="inline">MoveEntity(h, dx, dy, dz)</code></td><td>Suma un desplazamiento en espacio de mundo.</td></tr>
+      <tr><td><code class="inline">MoveEntityLocal(h, dx, dy, dz)</code></td><td>Mueve en el espacio local del objeto (según su rotación en Y): z = adelante/atrás, x = derecha/izquierda, y = arriba/abajo.</td></tr>
+      <tr><td><code class="inline">RotateEntity(h, rx, ry, rz)</code></td><td>Fija la rotación absoluta, en grados.</td></tr>
+      <tr><td><code class="inline">TurnEntity(h, drx, dry, drz)</code></td><td>Suma rotación (grados) a la actual.</td></tr>
+      <tr><td><code class="inline">ScaleEntity(h, sx, sy, sz)</code></td><td>Fija la escala en cada eje.</td></tr>
+      <tr><td><code class="inline">PointEntity(h, objetivo)</code></td><td>Rota <code class="inline">h</code> en Y para que su frente apunte hacia <code class="inline">objetivo</code>. Ideal para IA simple ("mirar al jugador").</td></tr>
+      <tr><td><code class="inline">EntityX/Y/Z(h)</code></td><td>Devuelven la posición en cada eje.</td></tr>
+      <tr><td><code class="inline">EntityRotX/Y/Z(h)</code></td><td>Devuelven la rotación en cada eje.</td></tr>
+      <tr><td><code class="inline">EntityScaleX/Y/Z(h)</code></td><td>Devuelven la escala en cada eje.</td></tr>
+      <tr><td><code class="inline">EntityDistance(a, b)</code></td><td>Distancia euclídea entre dos objetos.</td></tr>
+      <tr><td><code class="inline">EntitiesOverlap(a, b)</code></td><td>Colisión simple por cajas alineadas a los ejes (AABB), usando la escala como tamaño.</td></tr>
+    </table>
+
+    <h3>Apariencia y visibilidad</h3>
+    <table>
+      <tr><th>Función</th><th>Descripción</th></tr>
+      <tr><td><code class="inline">ColorEntity(h, r, g, b)</code></td><td>Color sólido, valores 0-255 (como en Blitz3D). Pasar <code class="inline">(-1,-1,-1)</code> restaura el color arcoíris por defecto.</td></tr>
+      <tr><td><code class="inline">HideEntity(h)</code> / <code class="inline">ShowEntity(h)</code></td><td>Oculta o muestra el objeto.</td></tr>
+      <tr><td><code class="inline">EntityHidden(h)</code></td><td>Devuelve si está oculto.</td></tr>
+    </table>
+
+    <h3>Cámara</h3>
+    <table>
+      <tr><th>Función</th><th>Descripción</th></tr>
+      <tr><td><code class="inline">CameraFollow(h)</code></td><td>Activa el seguimiento de cámara sobre el objeto <code class="inline">h</code> (equivalente a tildar "Follow" en el panel Camera).</td></tr>
+      <tr><td><code class="inline">CameraFollowOff()</code></td><td>Desactiva el seguimiento.</td></tr>
+      <tr><td><code class="inline">SetCameraTarget(x, y, z)</code></td><td>Fija manualmente el punto que mira/orbita la cámara.</td></tr>
+      <tr><td><code class="inline">SetCameraAngles(yaw, pitch)</code></td><td>Fija los ángulos de la órbita (pitch se recorta a ±89°).</td></tr>
+      <tr><td><code class="inline">SetCameraDistance(d)</code></td><td>Fija la distancia de la cámara al target (recortada a los límites min/max configurados).</td></tr>
+      <tr><td><code class="inline">CameraTargetX/Y/Z()</code></td><td>Devuelven el punto target actual.</td></tr>
+      <tr><td><code class="inline">CameraYaw()</code> / <code class="inline">CameraPitch()</code> / <code class="inline">CameraDist()</code></td><td>Devuelven los valores actuales de la órbita.</td></tr>
+    </table>
+
+    <h3>Entrada (teclado / mouse)</h3>
+    <table>
+      <tr><th>Función</th><th>Descripción</th></tr>
+      <tr><td><code class="inline">KeyDown(vk)</code></td><td>True mientras la tecla está apretada. <code class="inline">vk</code> es un Virtual-Key Code de Windows.</td></tr>
+      <tr><td><code class="inline">KeyHit(vk)</code></td><td>True solo en el frame en que la tecla pasa de arriba a abajo.</td></tr>
+      <tr><td><code class="inline">MouseX()</code> / <code class="inline">MouseY()</code></td><td>Posición del mouse relativa al viewport (0,0 = esquina superior izquierda). Devuelve -1,-1 si el mouse está fuera del viewport.</td></tr>
+      <tr><td><code class="inline">MouseInViewport()</code></td><td>True si el mouse está sobre el viewport de Render.</td></tr>
+      <tr><td><code class="inline">MouseDown(btn)</code> / <code class="inline">MouseHit(btn)</code></td><td>Estado de los botones del mouse. <code class="inline">btn</code>: 1 = izquierdo, 2 = derecho, 3 = medio.</td></tr>
+    </table>
+
+    <h3>Utilidades</h3>
+    <table>
+      <tr><th>Función</th><th>Descripción</th></tr>
+      <tr><td><code class="inline">GetTime()</code></td><td>Segundos transcurridos desde que se apretó Play.</td></tr>
+      <tr><td><code class="inline">Rnd()</code> / <code class="inline">Rnd(max)</code> / <code class="inline">Rnd(min,max)</code></td><td>Número al azar de punto flotante: 0..1, 0..max, o min..max.</td></tr>
+      <tr><td><code class="inline">Rand(min, max)</code></td><td>Entero al azar entre min y max, inclusive.</td></tr>
+      <tr><td><code class="inline">Clamp(v, min, max)</code></td><td>Recorta <code class="inline">v</code> al rango [min, max].</td></tr>
+      <tr><td><code class="inline">print(...)</code></td><td>Reemplaza el <code class="inline">print</code> estándar de Lua: la salida va al panel Console en vez de a una terminal.</td></tr>
+    </table>
+  </section>
+
+  <section id="escenas">
+    <h2><span class="num">09</span> Guardar y cargar escenas</h2>
+    <p>
+      <strong>Save Scene</strong> / <strong>Load Scene</strong> (en el panel Toolbar) persisten la escena
+      de edición completa —todos los objetos con su transform, forma, color y visibilidad, más la
+      configuración de la cámara— en un archivo <strong>JSON</strong> (por defecto
+      <code class="inline">scene.json</code>, en la misma carpeta del ejecutable).
+    </p>
+    <ul>
+      <li>El nombre/ruta del archivo se edita en el campo de texto encima de los botones.</li>
+      <li>Si un objeto es un modelo <code class="inline">.obj</code> cuyo archivo ya no se encuentra al
+        recargar la escena, el motor lo reporta en la Console en vez de fallar silenciosamente.</li>
+      <li>Guardar/cargar escena es independiente del script: es el estado de edición, no lo que pasa
+        durante <strong>Play</strong> (que siempre arranca de nuevo desde <code class="inline">Start()</code>).</li>
+    </ul>
+    <div class="note warn">
+      Los cambios que un script hace en tiempo de ejecución (objetos creados con <code class="inline">CreateCube</code>,
+      posiciones movidas por <code class="inline">Update</code>, etc.) <strong>no</strong> se guardan solos:
+      se descartan al apretar <strong>Stop</strong>, que restaura la escena tal como estaba antes de Play.
+    </div>
+  </section>
+
+  <section id="descargas">
+    <h2><span class="num">10</span> Descargas</h2>
+    <p>Versión de escritorio para Windows, compilada en modo Debug.</p>
+
+    <div class="download-card">
+      <div class="info">
+        <h4>DevCode3D.exe</h4>
+        <p>Windows 64-bit · Build Debug · ~6,4 MB</p>
+      </div>
+      <a class="btn-download" id="download-btn" href="descargas/DevCode3D.exe" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar .exe
+      </a>
+    </div>
+
+    <div class="download-count">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span class="num" id="download-count-num">—</span> descargas hasta ahora
+    </div>
+
+    <ul class="req-list">
+      <li>Sistema operativo Windows (64-bit)</li>
+      <li>Tarjeta gráfica con soporte OpenGL</li>
+      <li>Sin instalación: ejecutable portable</li>
+      <li>Colocá <code class="inline">.obj</code>/<code class="inline">.mtl</code> junto al .exe para cargarlos por ruta relativa</li>
+    </ul>
+
+    <div class="note">
+      El ejecutable corre en la misma carpeta donde busca <code class="inline">scene.json</code> y los
+      modelos <code class="inline">.obj</code> referenciados por ruta relativa (ver sección
+      <a href="#escenas">Escenas</a>). Si lo movés, llevá también esos archivos.
+    </div>
+  </section>
+
+  <section id="creditos">
+    <h2><span class="num">11</span> Créditos</h2>
+    <div class="credits">
+      <div class="mark">ZS</div>
+      <div class="txt">
+        <h4>ZyronSoftware</h4>
+        <p>DevCode3D — proyecto desarrollado en 2026.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  DevCode3D © 2026 ZyronSoftware · Documentación basada en el código fuente (<code class="inline">main-imgui.cpp</code>) y capturas de la propia aplicación.
+  <div style="margin-top:14px;">
+    <img src="https://visitor-badge.laobi.icu/badge?page_id=ciroparada81-boop.blitzviwer3d" alt="Contador de visitas" style="vertical-align:middle;">
+  </div>
+</footer>
+
+<script>
+(function(){
+  var COUNTER_NAMESPACE = "devcode3d-docs";
+  var COUNTER_KEY = "exe-downloads";
+  var el = document.getElementById("download-count-num");
+  var btn = document.getElementById("download-btn");
+
+  function render(value){
+    if(el) el.textContent = value;
+  }
+
+  // Muestra el contador actual al cargar la página (sin incrementarlo).
+  fetch("https://api.countapi.xyz/get/" + COUNTER_NAMESPACE + "/" + COUNTER_KEY)
+    .then(function(r){ return r.json(); })
+    .then(function(data){ render(data && typeof data.value === "number" ? data.value : 0); })
+    .catch(function(){ render(0); });
+
+  // Incrementa cuando se hace clic realmente en el enlace de descarga.
+  if(btn){
+    btn.addEventListener("click", function(){
+      fetch("https://api.countapi.xyz/hit/" + COUNTER_NAMESPACE + "/" + COUNTER_KEY)
+        .then(function(r){ return r.json(); })
+        .then(function(data){ if(data && typeof data.value === "number") render(data.value); })
+        .catch(function(){ /* el contador es best-effort, se ignoran errores */ });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
