@@ -303,192 +303,195 @@
 <body>
 
 <header>
+  <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+    <a href="index.es.html" class="badge" style="cursor:pointer;">🇪🇸 Español</a>
+  </div>
   <h1>Blitz<span>Viwer</span>3D</h1>
-  <p class="tag">Un editor/visor 3D liviano con scripting en Lua, inspirado en la API clásica de Blitz3D.
-  Creá objetos, moveté por la escena con la cámara orbital, escribí lógica de juego en el panel Script
-  y probala al instante con <strong>Play</strong>.</p>
+  <p class="tag">A lightweight 3D editor/viewer with Lua scripting, inspired by the classic Blitz3D API.
+  Create objects, navigate the scene with the orbit camera, write game logic in the Script panel,
+  and test it instantly with <strong>Play</strong>.</p>
   <div class="badges">
     <span class="badge">C++ · OpenGL · Dear ImGui</span>
     <span class="badge">Scripting: Lua 5.4</span>
-    <span class="badge">Escenas: JSON</span>
-    <span class="badge">Modelos: .obj / .mtl</span>
+    <span class="badge">Scenes: JSON</span>
+    <span class="badge">Models: .obj / .mtl</span>
     <span class="badge">© 2026 ZyronSoftware</span>
   </div>
 </header>
 
 <nav class="toc">
-  <a href="#intro">Introducción</a>
-  <a href="#interfaz">Interfaz</a>
+  <a href="#intro">Introduction</a>
+  <a href="#interfaz">Interface</a>
   <a href="#hierarchy">Hierarchy</a>
   <a href="#inspector">Inspector</a>
-  <a href="#camara">Cámara</a>
-  <a href="#viewport">Viewport y controles</a>
-  <a href="#script">Editor de Script</a>
-  <a href="#api">API Lua</a>
-  <a href="#escenas">Escenas</a>
-  <a href="#descargas">Descargas</a>
-  <a href="#creditos">Créditos</a>
+  <a href="#camara">Camera</a>
+  <a href="#viewport">Viewport & Controls</a>
+  <a href="#script">Script Editor</a>
+  <a href="#api">Lua API</a>
+  <a href="#escenas">Scenes</a>
+  <a href="#descargas">Downloads</a>
+  <a href="#creditos">Credits</a>
 </nav>
 
 <main>
 
   <section id="intro">
-    <h2><span class="num">01</span> Introducción</h2>
+    <h2><span class="num">01</span> Introduction</h2>
     <p>
-      BlitzViwer3D combina un editor de escena tipo Unity/Godot muy simplificado con un motor de scripting
-      Lua que replica la API clásica de <strong>Blitz3D</strong> (<code class="inline">CreateCube</code>,
-      <code class="inline">PositionEntity</code>, <code class="inline">MoveEntity</code>, etc.). La idea es
-      poder armar una escena a mano con el mouse (Hierarchy + Inspector), y después darle vida con un
-      script: mover objetos, detectar colisiones simples, seguir al jugador con la cámara, leer teclado y
-      mouse, y todo eso sin salir de la app.
+      BlitzViwer3D combines a highly simplified Unity/Godot-style scene editor with a Lua
+      scripting engine that replicates the classic <strong>Blitz3D</strong> API (<code class="inline">CreateCube</code>,
+      <code class="inline">PositionEntity</code>, <code class="inline">MoveEntity</code>, etc.). The idea is
+      to let you build a scene by hand with the mouse (Hierarchy + Inspector), then bring it to life with a
+      script: move objects, detect simple collisions, have the camera follow the player, read keyboard and
+      mouse input — all without leaving the app.
     </p>
     <div class="grid2">
       <div class="card">
-        <h4>Modo edición</h4>
+        <h4>Edit mode</h4>
         <p style="margin:0;color:var(--text-dim);font-size:.92rem;">
-          Creás y acomodás objetos (cubos, esferas o modelos <code class="inline">.obj</code>) usando
-          Hierarchy e Inspector. Esta disposición se puede guardar como escena.
+          Create and arrange objects (cubes, spheres, or <code class="inline">.obj</code> models) using
+          Hierarchy and Inspector. This layout can be saved as a scene.
         </p>
       </div>
       <div class="card">
-        <h4>Modo Play</h4>
+        <h4>Play mode</h4>
         <p style="margin:0;color:var(--text-dim);font-size:.92rem;">
-          Al apretar <strong>Play</strong> se ejecuta el script del panel Script. La escena de edición se
-          respalda automáticamente y se restaura al apretar <strong>Stop</strong>.
+          Pressing <strong>Play</strong> runs the script in the Script panel. The edit-mode scene is
+          backed up automatically and restored when you press <strong>Stop</strong>.
         </p>
       </div>
     </div>
   </section>
 
   <section id="interfaz">
-    <h2><span class="num">02</span> Interfaz general</h2>
-    <p>La ventana se organiza en paneles acoplables (dockeables), al estilo de un IDE:</p>
+    <h2><span class="num">02</span> General interface</h2>
+    <p>The window is organized into dockable panels, IDE-style:</p>
     <figure>
-      <img src="imagenes/cubo.png" alt="Interfaz general de BlitzViwer3D con un cubo en la escena">
-      <figcaption>Layout por defecto: Hierarchy (izquierda), Viewport 3D + Console (centro),
-      Toolbar / Camera / Inspector (derecha).</figcaption>
+      <img src="imagenes/cubo.png" alt="BlitzViwer3D general interface with a cube in the scene">
+      <figcaption>Default layout: Hierarchy (left), 3D Viewport + Console (center),
+      Toolbar / Camera / Inspector (right).</figcaption>
     </figure>
     <table>
-      <caption>Paneles principales</caption>
-      <tr><th>Panel</th><th>Función</th></tr>
-      <tr><td><strong>Hierarchy</strong></td><td>Lista de objetos de la escena. Crear/borrar cubos, esferas y modelos.</td></tr>
-      <tr><td><strong>Inspector</strong></td><td>Propiedades del objeto seleccionado: nombre, transform, forma, color.</td></tr>
-      <tr><td><strong>Script</strong></td><td>Editor de código Lua (pestaña junto a Render).</td></tr>
-      <tr><td><strong>Render</strong></td><td>Viewport 3D donde se ve y se navega la escena.</td></tr>
-      <tr><td><strong>Console</strong></td><td>Salida de <code class="inline">print()</code>, errores de Lua y eventos Play/Stop.</td></tr>
-      <tr><td><strong>Camera</strong></td><td>Configuración de la cámara orbital y del modo "Follow".</td></tr>
-      <tr><td><strong>Toolbar</strong></td><td>Play / Stop, Wireframe, Grid, guardar/cargar escena, salir.</td></tr>
+      <caption>Main panels</caption>
+      <tr><th>Panel</th><th>Function</th></tr>
+      <tr><td><strong>Hierarchy</strong></td><td>List of objects in the scene. Create/delete cubes, spheres, and models.</td></tr>
+      <tr><td><strong>Inspector</strong></td><td>Properties of the selected object: name, transform, shape, color.</td></tr>
+      <tr><td><strong>Script</strong></td><td>Lua code editor (tab next to Render).</td></tr>
+      <tr><td><strong>Render</strong></td><td>3D viewport where you view and navigate the scene.</td></tr>
+      <tr><td><strong>Console</strong></td><td>Output of <code class="inline">print()</code>, Lua errors, and Play/Stop events.</td></tr>
+      <tr><td><strong>Camera</strong></td><td>Orbit camera settings and "Follow" mode.</td></tr>
+      <tr><td><strong>Toolbar</strong></td><td>Play / Stop, Wireframe, Grid, save/load scene, exit.</td></tr>
     </table>
     <figure>
-      <img src="imagenes/editor.png" alt="Vista del panel Script con la pestaña Render vacía">
-      <figcaption>El panel central alterna entre la pestaña <strong>Script</strong> (código) y
-      <strong>Render</strong> (vista 3D).</figcaption>
+      <img src="imagenes/editor.png" alt="Script panel view with the Render tab empty">
+      <figcaption>The center panel switches between the <strong>Script</strong> tab (code) and
+      <strong>Render</strong> (3D view).</figcaption>
     </figure>
   </section>
 
   <section id="hierarchy">
-    <h2><span class="num">03</span> Panel Hierarchy — crear objetos</h2>
+    <h2><span class="num">03</span> Hierarchy panel — creating objects</h2>
     <figure>
-      <img src="imagenes/crear.png" alt="Panel Hierarchy con botones + Cube, + Sphere, Delete y + Model">
-      <figcaption>Botonera de creación de objetos.</figcaption>
+      <img src="imagenes/crear.png" alt="Hierarchy panel with + Cube, + Sphere, Delete, and + Model buttons">
+      <figcaption>Object creation buttons.</figcaption>
     </figure>
     <ul>
-      <li><strong>+ Cube</strong> / <strong>+ Sphere</strong>: crean un objeto nuevo en el origen y lo seleccionan automáticamente.</li>
-      <li><strong>Delete</strong>: borra el objeto seleccionado (se habilita solo si hay uno seleccionado).</li>
-      <li><strong>Campo de texto + Model</strong>: escribí la ruta a un archivo <code class="inline">.obj</code>
-        (por ejemplo <code class="inline">model.obj</code>) y tocá <strong>+ Model</strong> para cargarlo.
-        Los materiales <code class="inline">.mtl</code> se buscan en la misma carpeta.</li>
-      <li>La lista de abajo muestra todos los objetos de la escena. Los ocultos aparecen atenuados con
-        la marca <em>(oculto)</em>. Click para seleccionar.</li>
+      <li><strong>+ Cube</strong> / <strong>+ Sphere</strong>: create a new object at the origin and select it automatically.</li>
+      <li><strong>Delete</strong>: deletes the selected object (only enabled when one is selected).</li>
+      <li><strong>Text field + Model</strong>: type the path to an <code class="inline">.obj</code> file
+        (e.g. <code class="inline">model.obj</code>) and click <strong>+ Model</strong> to load it.
+        <code class="inline">.mtl</code> materials are looked up in the same folder.</li>
+      <li>The list below shows all objects in the scene. Hidden objects appear dimmed with
+        the <em>(hidden)</em> tag. Click to select.</li>
     </ul>
   </section>
 
   <section id="inspector">
-    <h2><span class="num">04</span> Panel Inspector — editar propiedades</h2>
+    <h2><span class="num">04</span> Inspector panel — editing properties</h2>
     <div class="grid2">
       <figure style="margin:22px 0;">
-        <img src="imagenes/posicion.png" alt="Objeto seleccionado con gizmo de ejes y panel Inspector">
-        <figcaption>Al seleccionar un objeto se resalta en el viewport con sus ejes locales.</figcaption>
+        <img src="imagenes/posicion.png" alt="Selected object with axis gizmo and Inspector panel">
+        <figcaption>Selecting an object highlights it in the viewport with its local axes.</figcaption>
       </figure>
       <figure style="margin:22px 0;">
-        <img src="imagenes/color.png" alt="Panel Inspector mostrando Transform y color propio">
-        <figcaption>Transform (posición/rotación/escala) y color personalizado.</figcaption>
+        <img src="imagenes/color.png" alt="Inspector panel showing Transform and custom color">
+        <figcaption>Transform (position/rotation/scale) and a custom color.</figcaption>
       </figure>
     </div>
     <table>
-      <caption>Campos del Inspector</caption>
-      <tr><th>Campo</th><th>Descripción</th></tr>
-      <tr><td><strong>Name</strong></td><td>Nombre del objeto. Se usa con <code class="inline">GetEntityByName</code> desde el script.</td></tr>
-      <tr><td><strong>Position / Rotation / Scale</strong></td><td>Transform en X, Y, Z. Rotación en grados. Arrastrá con el mouse para cambiar el valor, o hacé doble click para tipearlo.</td></tr>
-      <tr><td><strong>Shape</strong></td><td><code class="inline">Cube</code> o <code class="inline">Sphere</code>. Si el objeto viene de un <code class="inline">.obj</code>, en vez de esto se muestra la ruta del modelo y su cantidad de triángulos, con un botón <strong>Reload</strong>.</td></tr>
-      <tr><td><strong>Color propio</strong></td><td>Si está desactivado, el objeto usa el color "arcoíris" de fábrica por cara. Si se activa, se puede elegir un color sólido con el selector RGB.</td></tr>
-      <tr><td><strong>Oculto</strong></td><td>Igual que <code class="inline">HideEntity</code>/<code class="inline">ShowEntity</code> desde script: oculta el objeto sin borrarlo.</td></tr>
+      <caption>Inspector fields</caption>
+      <tr><th>Field</th><th>Description</th></tr>
+      <tr><td><strong>Name</strong></td><td>Object name. Used with <code class="inline">GetEntityByName</code> from the script.</td></tr>
+      <tr><td><strong>Position / Rotation / Scale</strong></td><td>Transform in X, Y, Z. Rotation in degrees. Drag with the mouse to change the value, or double-click to type it.</td></tr>
+      <tr><td><strong>Shape</strong></td><td><code class="inline">Cube</code> or <code class="inline">Sphere</code>. If the object comes from an <code class="inline">.obj</code> file, this is replaced by the model path and its triangle count, with a <strong>Reload</strong> button.</td></tr>
+      <tr><td><strong>Custom color</strong></td><td>When off, the object uses the default "rainbow" color per face. When on, you can pick a solid color with the RGB selector.</td></tr>
+      <tr><td><strong>Hidden</strong></td><td>Same as <code class="inline">HideEntity</code>/<code class="inline">ShowEntity</code> from script: hides the object without deleting it.</td></tr>
     </table>
   </section>
 
   <section id="camara">
-    <h2><span class="num">05</span> Panel Camera</h2>
-    <p>La cámara es una <strong>cámara orbital</strong> (yaw / pitch / distancia alrededor de un punto
-    "target"), con la opción de seguir automáticamente a un objeto:</p>
+    <h2><span class="num">05</span> Camera panel</h2>
+    <p>The camera is an <strong>orbit camera</strong> (yaw / pitch / distance around a
+    "target" point), with the option to automatically follow an object:</p>
     <table>
-      <tr><th>Control</th><th>Qué hace</th></tr>
-      <tr><td><strong>Follow</strong> + <strong>Objeto</strong></td><td>Si está activo, el punto target de la órbita persigue la posición del objeto elegido, con un suavizado configurable. Vos seguís pudiendo orbitar y hacer zoom alrededor de él.</td></tr>
-      <tr><td><strong>Seguir el seleccionado</strong></td><td>Atajo: activa Follow sobre el objeto actualmente seleccionado en Hierarchy.</td></tr>
-      <tr><td><strong>Suavizado</strong></td><td>Qué tan rápido la cámara "alcanza" al objeto seguido (más alto = más inmediato).</td></tr>
-      <tr><td><strong>Offset</strong></td><td>Desplazamiento del punto de seguimiento respecto al objeto (por ejemplo, para mirarlo un poco más arriba).</td></tr>
-      <tr><td><strong>FOV</strong></td><td>Campo de visión de la cámara, en grados.</td></tr>
-      <tr><td><strong>Sens. órbita / Sens. zoom</strong></td><td>Sensibilidad del mouse al orbitar (botón derecho) y al hacer zoom (rueda).</td></tr>
-      <tr><td><strong>Invertir pitch (Y)</strong></td><td>Invierte el eje vertical al orbitar.</td></tr>
-      <tr><td><strong>Distancia min/max</strong></td><td>Límites de zoom.</td></tr>
-      <tr><td><strong>Reset Camera</strong></td><td>Vuelve todos los valores de cámara a los de fábrica.</td></tr>
+      <tr><th>Control</th><th>What it does</th></tr>
+      <tr><td><strong>Follow</strong> + <strong>Object</strong></td><td>When enabled, the orbit's target point follows the chosen object's position, with configurable smoothing. You can still orbit and zoom around it.</td></tr>
+      <tr><td><strong>Follow selected</strong></td><td>Shortcut: enables Follow on the object currently selected in Hierarchy.</td></tr>
+      <tr><td><strong>Smoothing</strong></td><td>How fast the camera "catches up" to the followed object (higher = more immediate).</td></tr>
+      <tr><td><strong>Offset</strong></td><td>Offset of the follow point relative to the object (e.g. to look slightly above it).</td></tr>
+      <tr><td><strong>FOV</strong></td><td>Camera field of view, in degrees.</td></tr>
+      <tr><td><strong>Orbit sens. / Zoom sens.</strong></td><td>Mouse sensitivity when orbiting (right button) and zooming (wheel).</td></tr>
+      <tr><td><strong>Invert pitch (Y)</strong></td><td>Inverts the vertical axis while orbiting.</td></tr>
+      <tr><td><strong>Min/max distance</strong></td><td>Zoom limits.</td></tr>
+      <tr><td><strong>Reset Camera</strong></td><td>Resets all camera values to factory defaults.</td></tr>
     </table>
   </section>
 
   <section id="viewport">
-    <h2><span class="num">06</span> Viewport (Render) y controles de mouse</h2>
+    <h2><span class="num">06</span> Viewport (Render) & mouse controls</h2>
     <table>
-      <tr><th>Acción</th><th>Control</th></tr>
-      <tr><td>Orbitar cámara</td><td>Arrastrar con <span class="kbd">Botón derecho</span> del mouse</td></tr>
-      <tr><td>Zoom</td><td><span class="kbd">Rueda</span> del mouse</td></tr>
-      <tr><td>Seleccionar objeto</td><td>Click en Hierarchy, o desde el script</td></tr>
+      <tr><th>Action</th><th>Control</th></tr>
+      <tr><td>Orbit camera</td><td>Drag with the <span class="kbd">Right mouse button</span></td></tr>
+      <tr><td>Zoom</td><td>Mouse <span class="kbd">Wheel</span></td></tr>
+      <tr><td>Select object</td><td>Click in Hierarchy, or from the script</td></tr>
     </table>
     <table>
-      <tr><th>Toolbar</th><th>Función</th></tr>
-      <tr><td><strong>Play</strong></td><td>Guarda un respaldo de la escena, resetea la consola y el reloj interno, compila y ejecuta el script, y llama a <code class="inline">Start()</code> si existe.</td></tr>
-      <tr><td><strong>Stop</strong></td><td>Cierra el estado de Lua y restaura la escena tal como estaba antes de Play.</td></tr>
-      <tr><td><strong>Wireframe</strong></td><td>Dibuja los objetos en modo alambre.</td></tr>
-      <tr><td><strong>Grid</strong></td><td>Muestra/oculta el piso cuadriculado y los ejes de referencia.</td></tr>
-      <tr><td><strong>Save Scene / Load Scene</strong></td><td>Guarda o carga la escena (objetos + cámara) en un archivo JSON, con el nombre indicado en el campo de texto (por defecto <code class="inline">scene.json</code>).</td></tr>
-      <tr><td><strong>Exit</strong></td><td>Cierra la aplicación.</td></tr>
+      <tr><th>Toolbar</th><th>Function</th></tr>
+      <tr><td><strong>Play</strong></td><td>Backs up the scene, resets the console and the internal clock, compiles and runs the script, and calls <code class="inline">Start()</code> if it exists.</td></tr>
+      <tr><td><strong>Stop</strong></td><td>Closes the Lua state and restores the scene to how it was before Play.</td></tr>
+      <tr><td><strong>Wireframe</strong></td><td>Draws objects in wireframe mode.</td></tr>
+      <tr><td><strong>Grid</strong></td><td>Shows/hides the grid floor and reference axes.</td></tr>
+      <tr><td><strong>Save Scene / Load Scene</strong></td><td>Saves or loads the scene (objects + camera) to a JSON file, named per the text field (default <code class="inline">scene.json</code>).</td></tr>
+      <tr><td><strong>Exit</strong></td><td>Closes the application.</td></tr>
     </table>
   </section>
 
   <section id="script">
-    <h2><span class="num">07</span> Editor de Script</h2>
+    <h2><span class="num">07</span> Script Editor</h2>
     <p>
-      El panel <strong>Script</strong> es un editor de texto con resaltado de sintaxis para Lua. El código
-      que escribas ahí es el que se ejecuta al apretar <strong>Play</strong>.
+      The <strong>Script</strong> panel is a text editor with Lua syntax highlighting. The code
+      you write there is what runs when you press <strong>Play</strong>.
     </p>
     <figure>
-      <img src="imagenes/codigo.png" alt="Editor de script mostrando un ejemplo de código Lua">
-      <figcaption>Ejemplo: buscar al jugador por nombre, crear una "moneda" en una posición al azar y un
-      "enemigo" que sigue al jugador con la cámara.</figcaption>
+      <img src="imagenes/codigo.png" alt="Script editor showing a Lua code example">
+      <figcaption>Example: find the player by name, spawn a random "coin", and an
+      "enemy" that follows the player with the camera.</figcaption>
     </figure>
 
-    <h3>Funciones especiales</h3>
-    <p>El script puede definir dos funciones globales que el motor llama automáticamente:</p>
+    <h3>Special functions</h3>
+    <p>The script can define two global functions that the engine calls automatically:</p>
     <table>
-      <tr><th>Función</th><th>Cuándo se ejecuta</th></tr>
-      <tr><td><code class="inline">Start()</code></td><td>Una sola vez, apenas se apreta <strong>Play</strong> (después de correr el resto del script).</td></tr>
-      <tr><td><code class="inline">Update(dt)</code></td><td>Una vez por frame mientras el juego está corriendo. <code class="inline">dt</code> es el tiempo en segundos desde el frame anterior.</td></tr>
+      <tr><th>Function</th><th>When it runs</th></tr>
+      <tr><td><code class="inline">Start()</code></td><td>Once, right after pressing <strong>Play</strong> (after the rest of the script runs).</td></tr>
+      <tr><td><code class="inline">Update(dt)</code></td><td>Once per frame while the game is running. <code class="inline">dt</code> is the time in seconds since the previous frame.</td></tr>
     </table>
     <div class="note">
-      Si el script tiene un error (de sintaxis o en tiempo de ejecución), el mensaje aparece en rojo en la
-      <strong>Console</strong> y la reproducción se detiene automáticamente.
+      If the script has an error (syntax or runtime), the message appears in red in the
+      <strong>Console</strong> and playback stops automatically.
     </div>
 
-    <h3>Ejemplo mínimo</h3>
-    <pre><span class="c">-- Se ejecuta una vez al arrancar</span>
+    <h3>Minimal example</h3>
+    <pre><span class="c">-- Runs once at startup</span>
 <span class="kw">function</span> <span class="fn">Start</span>()
     player = CreateCube()
     ColorEntity(player, <span class="num">80</span>, <span class="num">160</span>, <span class="num">255</span>)
@@ -496,7 +499,7 @@
     CameraFollow(player)
 <span class="kw">end</span>
 
-<span class="c">-- Se ejecuta cada frame</span>
+<span class="c">-- Runs every frame</span>
 <span class="kw">function</span> <span class="fn">Update</span>(dt)
     <span class="kw">local</span> speed = <span class="num">4</span>
     <span class="kw">if</span> KeyDown(<span class="num">0x57</span>) <span class="kw">then</span> MoveEntityLocal(player, <span class="num">0</span>, <span class="num">0</span>,  speed*dt) <span class="kw">end</span> <span class="c">-- W</span>
@@ -505,148 +508,148 @@
     <span class="kw">if</span> KeyDown(<span class="num">0x44</span>) <span class="kw">then</span> TurnEntity(player, <span class="num">0</span>,  <span class="num">90</span>*dt, <span class="num">0</span>) <span class="kw">end</span> <span class="c">-- D</span>
 <span class="kw">end</span></pre>
     <div class="note">
-      Los códigos de teclas para <code class="inline">KeyDown</code>/<code class="inline">KeyHit</code>
-      son los <em>Virtual-Key Codes</em> de Windows (por ejemplo <code class="inline">0x57</code> = "W",
-      <code class="inline">0x20</code> = barra espaciadora, <code class="inline">0x1B</code> = Escape).
+      Key codes for <code class="inline">KeyDown</code>/<code class="inline">KeyHit</code>
+      are Windows <em>Virtual-Key Codes</em> (e.g. <code class="inline">0x57</code> = "W",
+      <code class="inline">0x20</code> = spacebar, <code class="inline">0x1B</code> = Escape).
     </div>
   </section>
 
   <section id="api">
-    <h2><span class="num">08</span> Referencia de la API Lua</h2>
-    <p class="lead">Todas estas funciones quedan disponibles como globales dentro del script, sin necesidad
-    de <code class="inline">require</code>. Los "objetos" son referenciados por un <em>handle</em> numérico
-    (el valor que devuelven <code class="inline">CreateCube</code>, <code class="inline">CreateSphere</code>, etc.).</p>
+    <h2><span class="num">08</span> Lua API reference</h2>
+    <p class="lead">All of these functions are available as globals inside the script, no need
+    for <code class="inline">require</code>. "Objects" are referenced by a numeric <em>handle</em>
+    (the value returned by <code class="inline">CreateCube</code>, <code class="inline">CreateSphere</code>, etc.).</p>
 
-    <h3>Creación y consulta de objetos</h3>
+    <h3>Creating and querying objects</h3>
     <table>
-      <tr><th>Función</th><th>Descripción</th></tr>
-      <tr><td><code class="inline">CreateCube()</code></td><td>Crea un cubo y devuelve su handle.</td></tr>
-      <tr><td><code class="inline">CreateSphere()</code></td><td>Crea una esfera y devuelve su handle.</td></tr>
-      <tr><td><code class="inline">LoadModel(ruta)</code></td><td>Carga un modelo <code class="inline">.obj</code> (reutiliza la malla si ya fue cargada) y crea un objeto con ella.</td></tr>
-      <tr><td><code class="inline">GetEntityByName(nombre)</code></td><td>Devuelve el handle del primer objeto con ese nombre, o <code class="inline">nil</code> si no existe.</td></tr>
-      <tr><td><code class="inline">EntityByIndex(i)</code></td><td>Devuelve el handle en la posición <code class="inline">i</code> (1..CountEntities()), útil para recorrer todos los objetos.</td></tr>
-      <tr><td><code class="inline">CountEntities()</code></td><td>Cantidad total de objetos en la escena (incluye ocultos/borrados).</td></tr>
-      <tr><td><code class="inline">EntityExists(handle)</code></td><td>Chequea si un handle sigue siendo válido, sin tirar error.</td></tr>
-      <tr><td><code class="inline">EntityName(handle)</code></td><td>Devuelve el nombre del objeto.</td></tr>
-      <tr><td><code class="inline">DeleteEntity(handle)</code></td><td>Borrado "suave": lo oculta y le cambia el nombre a <code class="inline">(deleted)</code> (los handles de otros objetos no se invalidan).</td></tr>
+      <tr><th>Function</th><th>Description</th></tr>
+      <tr><td><code class="inline">CreateCube()</code></td><td>Creates a cube and returns its handle.</td></tr>
+      <tr><td><code class="inline">CreateSphere()</code></td><td>Creates a sphere and returns its handle.</td></tr>
+      <tr><td><code class="inline">LoadModel(path)</code></td><td>Loads an <code class="inline">.obj</code> model (reuses the mesh if already loaded) and creates an object with it.</td></tr>
+      <tr><td><code class="inline">GetEntityByName(name)</code></td><td>Returns the handle of the first object with that name, or <code class="inline">nil</code> if none exists.</td></tr>
+      <tr><td><code class="inline">EntityByIndex(i)</code></td><td>Returns the handle at position <code class="inline">i</code> (1..CountEntities()), useful for iterating over all objects.</td></tr>
+      <tr><td><code class="inline">CountEntities()</code></td><td>Total number of objects in the scene (includes hidden/deleted ones).</td></tr>
+      <tr><td><code class="inline">EntityExists(handle)</code></td><td>Checks whether a handle is still valid, without raising an error.</td></tr>
+      <tr><td><code class="inline">EntityName(handle)</code></td><td>Returns the object's name.</td></tr>
+      <tr><td><code class="inline">DeleteEntity(handle)</code></td><td>"Soft" delete: hides the object and renames it to <code class="inline">(deleted)</code> (other objects' handles stay valid).</td></tr>
     </table>
 
     <h3>Transform</h3>
     <table>
-      <tr><th>Función</th><th>Descripción</th></tr>
-      <tr><td><code class="inline">PositionEntity(h, x, y, z)</code></td><td>Fija la posición absoluta.</td></tr>
-      <tr><td><code class="inline">MoveEntity(h, dx, dy, dz)</code></td><td>Suma un desplazamiento en espacio de mundo.</td></tr>
-      <tr><td><code class="inline">MoveEntityLocal(h, dx, dy, dz)</code></td><td>Mueve en el espacio local del objeto (según su rotación en Y): z = adelante/atrás, x = derecha/izquierda, y = arriba/abajo.</td></tr>
-      <tr><td><code class="inline">RotateEntity(h, rx, ry, rz)</code></td><td>Fija la rotación absoluta, en grados.</td></tr>
-      <tr><td><code class="inline">TurnEntity(h, drx, dry, drz)</code></td><td>Suma rotación (grados) a la actual.</td></tr>
-      <tr><td><code class="inline">ScaleEntity(h, sx, sy, sz)</code></td><td>Fija la escala en cada eje.</td></tr>
-      <tr><td><code class="inline">PointEntity(h, objetivo)</code></td><td>Rota <code class="inline">h</code> en Y para que su frente apunte hacia <code class="inline">objetivo</code>. Ideal para IA simple ("mirar al jugador").</td></tr>
-      <tr><td><code class="inline">EntityX/Y/Z(h)</code></td><td>Devuelven la posición en cada eje.</td></tr>
-      <tr><td><code class="inline">EntityRotX/Y/Z(h)</code></td><td>Devuelven la rotación en cada eje.</td></tr>
-      <tr><td><code class="inline">EntityScaleX/Y/Z(h)</code></td><td>Devuelven la escala en cada eje.</td></tr>
-      <tr><td><code class="inline">EntityDistance(a, b)</code></td><td>Distancia euclídea entre dos objetos.</td></tr>
-      <tr><td><code class="inline">EntitiesOverlap(a, b)</code></td><td>Colisión simple por cajas alineadas a los ejes (AABB), usando la escala como tamaño.</td></tr>
+      <tr><th>Function</th><th>Description</th></tr>
+      <tr><td><code class="inline">PositionEntity(h, x, y, z)</code></td><td>Sets the absolute position.</td></tr>
+      <tr><td><code class="inline">MoveEntity(h, dx, dy, dz)</code></td><td>Adds a displacement in world space.</td></tr>
+      <tr><td><code class="inline">MoveEntityLocal(h, dx, dy, dz)</code></td><td>Moves in the object's local space (based on its Y rotation): z = forward/backward, x = right/left, y = up/down.</td></tr>
+      <tr><td><code class="inline">RotateEntity(h, rx, ry, rz)</code></td><td>Sets the absolute rotation, in degrees.</td></tr>
+      <tr><td><code class="inline">TurnEntity(h, drx, dry, drz)</code></td><td>Adds rotation (degrees) to the current one.</td></tr>
+      <tr><td><code class="inline">ScaleEntity(h, sx, sy, sz)</code></td><td>Sets the scale on each axis.</td></tr>
+      <tr><td><code class="inline">PointEntity(h, target)</code></td><td>Rotates <code class="inline">h</code> on Y so its front faces <code class="inline">target</code>. Great for simple AI ("look at the player").</td></tr>
+      <tr><td><code class="inline">EntityX/Y/Z(h)</code></td><td>Return the position on each axis.</td></tr>
+      <tr><td><code class="inline">EntityRotX/Y/Z(h)</code></td><td>Return the rotation on each axis.</td></tr>
+      <tr><td><code class="inline">EntityScaleX/Y/Z(h)</code></td><td>Return the scale on each axis.</td></tr>
+      <tr><td><code class="inline">EntityDistance(a, b)</code></td><td>Euclidean distance between two objects.</td></tr>
+      <tr><td><code class="inline">EntitiesOverlap(a, b)</code></td><td>Simple axis-aligned box (AABB) collision, using scale as size.</td></tr>
     </table>
 
-    <h3>Apariencia y visibilidad</h3>
+    <h3>Appearance & visibility</h3>
     <table>
-      <tr><th>Función</th><th>Descripción</th></tr>
-      <tr><td><code class="inline">ColorEntity(h, r, g, b)</code></td><td>Color sólido, valores 0-255 (como en Blitz3D). Pasar <code class="inline">(-1,-1,-1)</code> restaura el color arcoíris por defecto.</td></tr>
-      <tr><td><code class="inline">HideEntity(h)</code> / <code class="inline">ShowEntity(h)</code></td><td>Oculta o muestra el objeto.</td></tr>
-      <tr><td><code class="inline">EntityHidden(h)</code></td><td>Devuelve si está oculto.</td></tr>
+      <tr><th>Function</th><th>Description</th></tr>
+      <tr><td><code class="inline">ColorEntity(h, r, g, b)</code></td><td>Solid color, values 0-255 (as in Blitz3D). Passing <code class="inline">(-1,-1,-1)</code> restores the default rainbow color.</td></tr>
+      <tr><td><code class="inline">HideEntity(h)</code> / <code class="inline">ShowEntity(h)</code></td><td>Hides or shows the object.</td></tr>
+      <tr><td><code class="inline">EntityHidden(h)</code></td><td>Returns whether it's hidden.</td></tr>
     </table>
 
-    <h3>Cámara</h3>
+    <h3>Camera</h3>
     <table>
-      <tr><th>Función</th><th>Descripción</th></tr>
-      <tr><td><code class="inline">CameraFollow(h)</code></td><td>Activa el seguimiento de cámara sobre el objeto <code class="inline">h</code> (equivalente a tildar "Follow" en el panel Camera).</td></tr>
-      <tr><td><code class="inline">CameraFollowOff()</code></td><td>Desactiva el seguimiento.</td></tr>
-      <tr><td><code class="inline">SetCameraTarget(x, y, z)</code></td><td>Fija manualmente el punto que mira/orbita la cámara.</td></tr>
-      <tr><td><code class="inline">SetCameraAngles(yaw, pitch)</code></td><td>Fija los ángulos de la órbita (pitch se recorta a ±89°).</td></tr>
-      <tr><td><code class="inline">SetCameraDistance(d)</code></td><td>Fija la distancia de la cámara al target (recortada a los límites min/max configurados).</td></tr>
-      <tr><td><code class="inline">CameraTargetX/Y/Z()</code></td><td>Devuelven el punto target actual.</td></tr>
-      <tr><td><code class="inline">CameraYaw()</code> / <code class="inline">CameraPitch()</code> / <code class="inline">CameraDist()</code></td><td>Devuelven los valores actuales de la órbita.</td></tr>
+      <tr><th>Function</th><th>Description</th></tr>
+      <tr><td><code class="inline">CameraFollow(h)</code></td><td>Enables camera follow on object <code class="inline">h</code> (equivalent to checking "Follow" in the Camera panel).</td></tr>
+      <tr><td><code class="inline">CameraFollowOff()</code></td><td>Disables following.</td></tr>
+      <tr><td><code class="inline">SetCameraTarget(x, y, z)</code></td><td>Manually sets the point the camera looks at / orbits around.</td></tr>
+      <tr><td><code class="inline">SetCameraAngles(yaw, pitch)</code></td><td>Sets the orbit angles (pitch is clamped to ±89°).</td></tr>
+      <tr><td><code class="inline">SetCameraDistance(d)</code></td><td>Sets the camera distance to the target (clamped to the configured min/max limits).</td></tr>
+      <tr><td><code class="inline">CameraTargetX/Y/Z()</code></td><td>Return the current target point.</td></tr>
+      <tr><td><code class="inline">CameraYaw()</code> / <code class="inline">CameraPitch()</code> / <code class="inline">CameraDist()</code></td><td>Return the current orbit values.</td></tr>
     </table>
 
-    <h3>Entrada (teclado / mouse)</h3>
+    <h3>Input (keyboard / mouse)</h3>
     <table>
-      <tr><th>Función</th><th>Descripción</th></tr>
-      <tr><td><code class="inline">KeyDown(vk)</code></td><td>True mientras la tecla está apretada. <code class="inline">vk</code> es un Virtual-Key Code de Windows.</td></tr>
-      <tr><td><code class="inline">KeyHit(vk)</code></td><td>True solo en el frame en que la tecla pasa de arriba a abajo.</td></tr>
-      <tr><td><code class="inline">MouseX()</code> / <code class="inline">MouseY()</code></td><td>Posición del mouse relativa al viewport (0,0 = esquina superior izquierda). Devuelve -1,-1 si el mouse está fuera del viewport.</td></tr>
-      <tr><td><code class="inline">MouseInViewport()</code></td><td>True si el mouse está sobre el viewport de Render.</td></tr>
-      <tr><td><code class="inline">MouseDown(btn)</code> / <code class="inline">MouseHit(btn)</code></td><td>Estado de los botones del mouse. <code class="inline">btn</code>: 1 = izquierdo, 2 = derecho, 3 = medio.</td></tr>
+      <tr><th>Function</th><th>Description</th></tr>
+      <tr><td><code class="inline">KeyDown(vk)</code></td><td>True while the key is held down. <code class="inline">vk</code> is a Windows Virtual-Key Code.</td></tr>
+      <tr><td><code class="inline">KeyHit(vk)</code></td><td>True only on the frame the key goes from up to down.</td></tr>
+      <tr><td><code class="inline">MouseX()</code> / <code class="inline">MouseY()</code></td><td>Mouse position relative to the viewport (0,0 = top-left corner). Returns -1,-1 if the mouse is outside the viewport.</td></tr>
+      <tr><td><code class="inline">MouseInViewport()</code></td><td>True if the mouse is over the Render viewport.</td></tr>
+      <tr><td><code class="inline">MouseDown(btn)</code> / <code class="inline">MouseHit(btn)</code></td><td>Mouse button state. <code class="inline">btn</code>: 1 = left, 2 = right, 3 = middle.</td></tr>
     </table>
 
-    <h3>Utilidades</h3>
+    <h3>Utilities</h3>
     <table>
-      <tr><th>Función</th><th>Descripción</th></tr>
-      <tr><td><code class="inline">GetTime()</code></td><td>Segundos transcurridos desde que se apretó Play.</td></tr>
-      <tr><td><code class="inline">Rnd()</code> / <code class="inline">Rnd(max)</code> / <code class="inline">Rnd(min,max)</code></td><td>Número al azar de punto flotante: 0..1, 0..max, o min..max.</td></tr>
-      <tr><td><code class="inline">Rand(min, max)</code></td><td>Entero al azar entre min y max, inclusive.</td></tr>
-      <tr><td><code class="inline">Clamp(v, min, max)</code></td><td>Recorta <code class="inline">v</code> al rango [min, max].</td></tr>
-      <tr><td><code class="inline">print(...)</code></td><td>Reemplaza el <code class="inline">print</code> estándar de Lua: la salida va al panel Console en vez de a una terminal.</td></tr>
+      <tr><th>Function</th><th>Description</th></tr>
+      <tr><td><code class="inline">GetTime()</code></td><td>Seconds elapsed since Play was pressed.</td></tr>
+      <tr><td><code class="inline">Rnd()</code> / <code class="inline">Rnd(max)</code> / <code class="inline">Rnd(min,max)</code></td><td>Random floating-point number: 0..1, 0..max, or min..max.</td></tr>
+      <tr><td><code class="inline">Rand(min, max)</code></td><td>Random integer between min and max, inclusive.</td></tr>
+      <tr><td><code class="inline">Clamp(v, min, max)</code></td><td>Clamps <code class="inline">v</code> to the [min, max] range.</td></tr>
+      <tr><td><code class="inline">print(...)</code></td><td>Overrides Lua's standard <code class="inline">print</code>: output goes to the Console panel instead of a terminal.</td></tr>
     </table>
   </section>
 
   <section id="escenas">
-    <h2><span class="num">09</span> Guardar y cargar escenas</h2>
+    <h2><span class="num">09</span> Saving and loading scenes</h2>
     <p>
-      <strong>Save Scene</strong> / <strong>Load Scene</strong> (en el panel Toolbar) persisten la escena
-      de edición completa —todos los objetos con su transform, forma, color y visibilidad, más la
-      configuración de la cámara— en un archivo <strong>JSON</strong> (por defecto
-      <code class="inline">scene.json</code>, en la misma carpeta del ejecutable).
+      <strong>Save Scene</strong> / <strong>Load Scene</strong> (in the Toolbar panel) persist the full
+      edit-mode scene — every object with its transform, shape, color, and visibility, plus the
+      camera configuration — to a <strong>JSON</strong> file (default
+      <code class="inline">scene.json</code>, in the same folder as the executable).
     </p>
     <ul>
-      <li>El nombre/ruta del archivo se edita en el campo de texto encima de los botones.</li>
-      <li>Si un objeto es un modelo <code class="inline">.obj</code> cuyo archivo ya no se encuentra al
-        recargar la escena, el motor lo reporta en la Console en vez de fallar silenciosamente.</li>
-      <li>Guardar/cargar escena es independiente del script: es el estado de edición, no lo que pasa
-        durante <strong>Play</strong> (que siempre arranca de nuevo desde <code class="inline">Start()</code>).</li>
+      <li>The file name/path is edited in the text field above the buttons.</li>
+      <li>If an object is an <code class="inline">.obj</code> model whose file can no longer be found
+        when reloading the scene, the engine reports it in the Console instead of failing silently.</li>
+      <li>Saving/loading a scene is independent of the script: it's the edit-mode state, not what happens
+        during <strong>Play</strong> (which always starts fresh from <code class="inline">Start()</code>).</li>
     </ul>
     <div class="note warn">
-      Los cambios que un script hace en tiempo de ejecución (objetos creados con <code class="inline">CreateCube</code>,
-      posiciones movidas por <code class="inline">Update</code>, etc.) <strong>no</strong> se guardan solos:
-      se descartan al apretar <strong>Stop</strong>, que restaura la escena tal como estaba antes de Play.
+      Changes a script makes at runtime (objects created with <code class="inline">CreateCube</code>,
+      positions moved by <code class="inline">Update</code>, etc.) are <strong>not</strong> saved automatically:
+      they're discarded when you press <strong>Stop</strong>, which restores the scene to how it was before Play.
     </div>
   </section>
 
   <section id="descargas">
-    <h2><span class="num">10</span> Descargas</h2>
-    <p>Versión de escritorio para Windows, compilada en modo Debug.</p>
+    <h2><span class="num">10</span> Downloads</h2>
+    <p>Windows desktop build, compiled in Debug mode.</p>
 
     <div class="download-card">
       <div class="info">
         <h4>BlitzViwer3D.exe</h4>
-        <p>Windows 64-bit · Build Debug · ~6,4 MB</p>
+        <p>Windows 64-bit · Debug build · ~6.4 MB</p>
       </div>
       <a class="btn-download" href="descargas/BlitzViwer3D.exe" download>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Descargar .exe
+        Download .exe
       </a>
     </div>
 
     <ul class="req-list">
-      <li>Sistema operativo Windows (64-bit)</li>
-      <li>Tarjeta gráfica con soporte OpenGL</li>
-      <li>Sin instalación: ejecutable portable</li>
-      <li>Colocá <code class="inline">.obj</code>/<code class="inline">.mtl</code> junto al .exe para cargarlos por ruta relativa</li>
+      <li>Windows operating system (64-bit)</li>
+      <li>Graphics card with OpenGL support</li>
+      <li>No installation: portable executable</li>
+      <li>Place <code class="inline">.obj</code>/<code class="inline">.mtl</code> files next to the .exe to load them by relative path</li>
     </ul>
 
     <div class="note">
-      El ejecutable corre en la misma carpeta donde busca <code class="inline">scene.json</code> y los
-      modelos <code class="inline">.obj</code> referenciados por ruta relativa (ver sección
-      <a href="#escenas">Escenas</a>). Si lo movés, llevá también esos archivos.
+      The executable runs from the same folder where it looks for <code class="inline">scene.json</code> and
+      any <code class="inline">.obj</code> models referenced by relative path (see the
+      <a href="#escenas">Scenes</a> section). If you move it, bring those files along too.
     </div>
   </section>
 
   <section id="creditos">
-    <h2><span class="num">11</span> Créditos</h2>
+    <h2><span class="num">11</span> Credits</h2>
     <div class="credits">
       <div class="mark">ZS</div>
       <div class="txt">
         <h4>ZyronSoftware</h4>
-        <p>BlitzViwer3D — proyecto desarrollado en 2026.</p>
+        <p>BlitzViwer3D — project developed in 2026.</p>
       </div>
     </div>
   </section>
@@ -654,7 +657,10 @@
 </main>
 
 <footer>
-  BlitzViwer3D © 2026 ZyronSoftware · Documentación basada en el código fuente (<code class="inline">main-imgui.cpp</code>) y capturas de la propia aplicación.
+  BlitzViwer3D © 2026 ZyronSoftware · Documentation based on the source code (<code class="inline">main-imgui.cpp</code>) and screenshots of the application itself.
+  <div style="margin-top:14px;">
+    <img src="https://visitor-badge.laobi.icu/badge?page_id=ciroparada81-boop.blitzviwer3d" alt="Visit counter" style="vertical-align:middle;">
+  </div>
 </footer>
 
 </body>
